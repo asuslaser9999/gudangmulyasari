@@ -66,11 +66,13 @@ class _StockDocFormScreenState extends State<StockDocFormScreen> {
   void _syncDefaultLocations(StockNotifier stock) {
     if (!_prefsReady || _didInitLocations || stock.locations.isEmpty) return;
     final auth = context.read<AuthNotifier>();
-    final warehouses = auth.visibleLocations(stock.warehouses);
+    final warehouses = stock.warehouses;
     final kitchens = auth.visibleLocations(stock.kitchens);
     final locations = auth.visibleLocations(stock.locations);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || _didInitLocations || locations.isEmpty) return;
+      if (!mounted || _didInitLocations) return;
+      if (_isReceipt && locations.isEmpty) return;
+      if (!_isReceipt && warehouses.isEmpty) return;
       setState(() {
         _fromId ??= _preferredId(warehouses, _savedFromId);
         _toId ??= _isReceipt
@@ -243,7 +245,7 @@ class _StockDocFormScreenState extends State<StockDocFormScreen> {
     _syncDefaultLocations(stock);
     final dateLabel = DateFormat('d MMMM yyyy', 'id_ID').format(_docDate);
     final locations = auth.visibleLocations(stock.locations);
-    final warehouses = auth.visibleLocations(stock.warehouses);
+    final warehouses = stock.warehouses;
     final kitchens = auth.visibleLocations(stock.kitchens);
     final toChoices = _isReceipt ? locations : kitchens;
     final fromValue = warehouses.any((loc) => loc.id == _fromId)
@@ -286,16 +288,23 @@ class _StockDocFormScreenState extends State<StockDocFormScreen> {
                   )
                 else ...[
                   DropdownButtonFormField<String>(
-                    key: ValueKey('from-$fromValue'),
+                    key: ValueKey(
+                      'from-${warehouses.map((loc) => loc.id).join(',')}-$fromValue',
+                    ),
                     initialValue: fromValue,
+                    isExpanded: true,
                     decoration: const InputDecoration(
                       labelText: 'Dari gudang',
+                      helperText: 'Wajib pilih gudang asal sebelum simpan.',
                     ),
+                    hint: const Text('Pilih gudang'),
                     items: [
                       for (final loc in warehouses)
                         DropdownMenuItem(value: loc.id, child: Text(loc.name)),
                     ],
-                    onChanged: (value) => setState(() => _fromId = value),
+                    onChanged: warehouses.isEmpty
+                        ? null
+                        : (value) => setState(() => _fromId = value),
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<String>(

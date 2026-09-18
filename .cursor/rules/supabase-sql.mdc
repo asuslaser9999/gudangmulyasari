@@ -10,6 +10,7 @@ alwaysApply: false
 - New work gets a new file `00N_gm_deskripsi.sql`. Do not edit an older migration that may already have been run.
 - Add RLS and grants explicitly. Avoid `SECURITY DEFINER` unless there is a clear reason.
 - Do not drop or rename unprefixed, `cn_`, or `ip_` objects.
+- Do not drop or rename columns the Flutter app already reads unless you plan a compatible rollout.
 
 ```sql
 -- ❌ BAD

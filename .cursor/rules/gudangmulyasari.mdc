@@ -13,6 +13,6 @@ Flutter warehouse app. UI copy is Indonesian.
 - Do not commit `.env`, print `SUPABASE_ANON_KEY`, or add a `service_role` key to the client app.
 - Do not create a git commit unless the user explicitly asks.
 - Login matches Mulyasari POS UI, but accounts use `@gudangmulyasari.pos` and `gm_profiles`. POS cashiers and other-app staff are not imported. The POS owner is bootstrapped as owner here.
-- Theme / branding are per-device (SharedPreferences).
+- Per-device only: theme, branding, last pickup locations. Synced remotely: staff access hours (`gm_app_settings`).
 - Release APK and Windows EXE belong in `dist/` (`InventoriGudang-vX.Y.Z.apk` + `InventoriGudang-Windows-x64`). Use `scripts/package_release.ps1`.
 - Change only what the task needs.

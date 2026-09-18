@@ -1,12 +1,22 @@
 ---
-description: Flutter layering for Gudang Mulyasari
+description: Flutter layering and existing helpers for lib/ code
 globs: lib/**/*.dart
 alwaysApply: false
 ---
 
-# Flutter
+# Flutter architecture
 
-- Layers: `config` / `models` → `services` → `notifiers` → `screens`.
-- Table and RPC names go through `GmTables`.
-- Theme and login chrome follow Mulyasari POS (`AppTheme`, `DarkBackground`, `StoreBrandingHeader`).
-- Prefer existing packages. Add a dependency only if required.
+Keep the existing layers: `config` / `models` → `services` → `notifiers` → `screens` / `widgets`. Put access policy in `lib/domain/`.
+
+- Table and RPC names go through `GmTables`. Do not hardcode `'gm_...'`.
+- Theme through `Theme.of(context)` and POS chrome (`AppTheme`, `DarkBackground`, `StoreBrandingHeader`).
+- Qty display: `qty_format`. Do not invent a second formatter.
+- Prefer packages already in `pubspec.yaml`. Add a dependency only when the task requires it.
+
+```dart
+// ❌ BAD
+await client.from('gm_items').select();
+
+// ✅ GOOD
+await client.from(GmTables.items).select();
+```
