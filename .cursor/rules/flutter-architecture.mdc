@@ -1,0 +1,12 @@
+---
+description: Flutter layering for Gudang Mulyasari
+globs: lib/**/*.dart
+alwaysApply: false
+---
+
+# Flutter
+
+- Layers: `config` / `models` → `services` → `notifiers` → `screens`.
+- Table and RPC names go through `GmTables`.
+- Theme and login chrome follow Mulyasari POS (`AppTheme`, `DarkBackground`, `StoreBrandingHeader`).
+- Prefer existing packages. Add a dependency only if required.

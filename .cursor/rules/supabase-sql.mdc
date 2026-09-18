@@ -1,0 +1,20 @@
+---
+description: SQL migration rules for the shared gm_ schema
+globs: supabase/**/*.sql
+alwaysApply: false
+---
+
+# Supabase SQL
+
+- Names: `gm_` tables, RPCs, and buckets only. This project shares a database with Ultimate POS, Cinnamon POS, and Inpin.
+- New work gets a new file `00N_gm_deskripsi.sql`. Do not edit an older migration that may already have been run.
+- Add RLS and grants explicitly. Avoid `SECURITY DEFINER` unless there is a clear reason.
+- Do not drop or rename unprefixed, `cn_`, or `ip_` objects.
+
+```sql
+-- ❌ BAD
+alter table locations add column foo text;
+
+-- ✅ GOOD
+alter table gm_locations add column foo text;
+```

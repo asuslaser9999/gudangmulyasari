@@ -1,0 +1,18 @@
+---
+description: Gudang Mulyasari project facts every change must follow
+alwaysApply: true
+---
+
+# Gudang Mulyasari
+
+Flutter warehouse app. UI copy is Indonesian.
+
+- Shares the same Supabase project as Ultimate POS, Cinnamon POS, and Inpin. Tables, RPCs, and buckets use the `gm_` prefix only. Never read or write Ultimate POS, Cinnamon (`cn_*`), or Inpin (`ip_*`) objects from app code.
+- Use `GmTables` for table/RPC names. Do not hardcode `'gm_...'` strings in new code.
+- SQL files in `supabase/migrations/` are not assumed applied on the server.
+- Do not commit `.env`, print `SUPABASE_ANON_KEY`, or add a `service_role` key to the client app.
+- Do not create a git commit unless the user explicitly asks.
+- Login matches Mulyasari POS UI, but accounts use `@gudangmulyasari.pos` and `gm_profiles`. POS cashiers and other-app staff are not imported. The POS owner is bootstrapped as owner here.
+- Theme / branding are per-device (SharedPreferences).
+- Release APK and Windows EXE belong in `dist/` (`InventoriGudang-vX.Y.Z.apk` + `InventoriGudang-Windows-x64`). Use `scripts/package_release.ps1`.
+- Change only what the task needs.
